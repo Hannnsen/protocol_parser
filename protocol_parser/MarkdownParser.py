@@ -167,7 +167,7 @@ class MarkdownParser(ParserBase):
             raise ImportError
 
         protocol_line_regex = re.compile(
-            r'^\[(?P<start>[0-9xX]{1,2}:[0-9xX]{1,2})\s?-\s?(?P<end>[0-9xX]{1,2}:[0-9xX]{1,2})]:\s?(?P<compounds>.*)$',
+            r'^\[(?P<start>[\dxX]{1,2}:[\dxX]{1,2})\s?-\s?(?P<end>[\dxX]{1,2}:[\dxX]{1,2})]:\s?(?P<compounds>.*)$',
             re.MULTILINE
         )
 
@@ -188,8 +188,10 @@ class MarkdownParser(ParserBase):
             protocol = self.__split_compounds(protocol)
             protocol = self.__connect_compound_times(protocol)
             protocol = self.__fix_dataframe(protocol)
+            protocol = protocol.reindex(columns=['compound', 'concentration', 'begin', 'end'])
 
-            protocols[name] = protocol.sort_values(by='begin', na_position='first', ignore_index=True)
+            protocols[name] = protocol.sort_values(by=['begin', 'compound', 'concentration'],
+                                                   na_position='first', ignore_index=True)
 
         return protocols
 

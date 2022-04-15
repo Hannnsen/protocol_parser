@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import pandas as pd
 
 import protocol_parser
@@ -10,7 +12,7 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    'markdown, metadata, result_csv',
+    'markdown, metadata, result_csvs',
     [
         (
             '### Experiment084d:\n'
@@ -32,15 +34,20 @@ import pytest
                  '0 days 00:05:02.795000076,none ')
             ],
 
-            'compound,concentration,begin,end\n'
-            'Glucose,6mM,,05:30\n'
-            'Glucose,8mM,05:30,\n'
-            'cAMP,25uM,27:00,43:30\n'
-            'Caffeine,10mM,43:30,'
+            [
+                ('Experiment084d',
+                 'compound,concentration,begin,end\n'
+                 'Glucose,6mM,,05:30\n'
+                 'Glucose,8mM,05:30,\n'
+                 'cAMP,25uM,27:00,43:30\n'
+                 'Caffeine,10mM,43:30,')
+            ]
+
+
         )
     ]
 )
-def test_markdown_parser(markdown, metadata, result_csv, tmp_path):
+def test_markdown_parser(markdown: str, metadata: List[Tuple[str, str]], result_csvs: List[Tuple[str, str]], tmp_path):
     parser: protocol_parser.ParserBase
 
     # prepare temp-file for markdown
@@ -55,13 +62,21 @@ def test_markdown_parser(markdown, metadata, result_csv, tmp_path):
         m.write_text(meta)
 
     # prepare temp-file with result CSV data
-    r = d / 'protocol.csv'
-    r.write_text(result_csv)
+    for experiment_name, result_csv in result_csvs:
+        r = d / f'{experiment_name}.csv'
+        r.write_text(result_csv)
 
+    # parse markdown protocols using MarkdownParser
     parser = protocol_parser.MarkdownParser(p, d)
-    csv_df = pd.read_csv(r)
     parsed_protocols = parser.parse()
-    assert pd.DataFrame.equals(csv_df, parsed_protocols)
+
+    # assert that protocols are valid
+    for key, value in parsed_protocols.items():
+        r = d / f'{key}.csv'
+        csv = pd.read_csv(r.as_posix())
+        csv.sort_values(by=['begin', 'compound', 'concentration'], na_position='first',
+                        inplace=True, ignore_index=True)
+        pd.testing.assert_frame_equal(csv, value, check_like=True)
 
 
 @pytest.mark.parametrize(
@@ -102,7 +117,7 @@ def test_markdown_parser(markdown, metadata, result_csv, tmp_path):
         )
     ]
 )
-def test_markdown_parser_experiment_names(markdown, name_list, tmp_path):
+def test_markdown_parser_experiment_names(markdown: str, name_list: List[str], tmp_path):
     # prepare temp-file for markdown
     d = tmp_path / 'parser_files'
     d.mkdir()
