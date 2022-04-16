@@ -2,14 +2,14 @@
 name = "protocol_parser"
 version = "0.1.0"
 description = ""
-authors = ["Johannes Pfabe <hannsen@mailbox.org>"]
+authors = ["Johannes Pfabe <39130094+Hannnsen@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pandas = "^1.4.1"
+pandas = "^1.4.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.0"
+pytest = "^7.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -20,7 +20,6 @@ import pytest
             '[05:30 - XX:XX]: Glucose 8mM\n'
             '[00:00 - 16:30]: Glucose 8mM, cAMP 25uM\n'
             '[16:30 - XX:XX]: Glucose 8mM, Caffeine 10mM',
-
             [
                 ('Experiment084d',
                  ',Name,SizeT,SizeX,SizeY,SizeZ,Nchannels,pxSize,pxUnit,bit depth,Frequency,Start time,End time,'
@@ -33,7 +32,6 @@ import pytest
                  '3,Series004,5979,256,256,1,1,1.00,µm,uint8,19.7,2022-03-23 18:22:51,2022-03-23 18:27:53.795000076,'
                  '0 days 00:05:02.795000076,none ')
             ],
-
             [
                 ('Experiment084d',
                  'compound,concentration,begin,end\n'
@@ -42,8 +40,6 @@ import pytest
                  'cAMP,25uM,27:00,43:30\n'
                  'Caffeine,10mM,43:30,')
             ]
-
-
         )
     ]
 )
