@@ -20,7 +20,6 @@ def parse_cli_arguments(content_to_parse: Optional[Iterable]) -> argparse.Namesp
                         default='MarkdownParser',
                         help='Type of the parser, which shall be used. (default: MarkdownParser)')
     parser.add_argument('input_file',
-                        dest='input_file',
                         help='Path of the input file being used.')
     args = parser.parse_args() if content_to_parse is None else parser.parse_args(content_to_parse)
     return args
@@ -29,7 +28,7 @@ def parse_cli_arguments(content_to_parse: Optional[Iterable]) -> argparse.Namesp
 def main(args: Optional[argparse.Namespace]):
     parser: ParserBase
 
-    args = parse_cli_arguments(args)
+    args = parse_cli_arguments(args) if args is None else args
     meta_dir = Path(args.metadata_dir)
     output_dir = Path(args.output_dir)
     input_file = Path(args.input_file)

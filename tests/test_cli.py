@@ -64,7 +64,7 @@ def test_cli_markdown_parser(markdown: str,
     args = parse_cli_arguments(['--metadata-dir', f'{d.as_posix()}',
                                 '--output-dir', f'{o.as_posix()}',
                                 '--parser-type', 'MarkdownParser',
-                                f''])
+                                f'{p.as_posix()}'])
     main(args)
 
     for file in o.iterdir():
@@ -81,3 +81,26 @@ def test_cli_markdown_parser(markdown: str,
                                         inplace=True, ignore_index=True)
 
             pd.testing.assert_frame_equal(parsed_protocol, sample_protocol, check_like=True)
+
+
+def test_cli_exception_parser(tmp_path):
+    args = parse_cli_arguments(['--metadata-dir', f'dir_doesnt_exist',
+                                '--output-dir', f'output_will_not_happen',
+                                '--parser-type', 'FaultyParser',
+                                f'markdown_will_not_be_parsed.md'])
+    with pytest.raises(FileNotFoundError):
+        main(args)
+
+    meta_dir = tmp_path / 'dir_doesnt_exist'
+    meta_dir.mkdir()
+    out_dir = tmp_path / 'output_will_not_happen'
+    out_dir.mkdir()
+    m = tmp_path / 'markdown_will_not_be_parsed.md'
+    m.touch()
+
+    args = parse_cli_arguments(['--metadata-dir', f'{meta_dir.as_posix()}',
+                                '--output-dir', f'{out_dir.as_posix()}',
+                                '--parser-type', 'FaultyParser',
+                                f'{m.as_posix()}'])
+    with pytest.raises(NotImplementedError):
+        main(args)
