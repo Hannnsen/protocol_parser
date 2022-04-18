@@ -1,8 +1,20 @@
 [tool.poetry]
 name = "protocol_parser"
 version = "0.1.0"
-description = ""
+description = "Utility to parse protocols for the CTN islets framework."
+license = "MIT"
 authors = ["Johannes Pfabe <39130094+Hannnsen@users.noreply.github.com>"]
+repository = "https://github.com/Hannnsen/protocol_parser"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Utilities"
+]
+
+[tool.poetry.scripts]
+protocol_parser = "protocol_parser.cli:main"
 
 [tool.poetry.dependencies]
 python = "^3.10"
