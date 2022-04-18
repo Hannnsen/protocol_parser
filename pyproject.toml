@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "protocol_parser"
+name = "CTN-ProtocolParser"
 version = "0.1.0"
 description = "Utility to parse protocols for the CTN islets framework."
 license = "MIT"
@@ -11,6 +11,9 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
     "Topic :: Utilities"
+]
+packages = [
+    { include = "protocol_parser" }
 ]
 
 [tool.poetry.scripts]
