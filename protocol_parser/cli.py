@@ -5,7 +5,7 @@ from typing import Iterable, Optional
 from . import __author__, __version__, MarkdownParser, ParserBase
 
 
-def parse_cli_arguments(content_to_parse: Optional[Iterable]) -> argparse.Namespace:
+def parse_cli_arguments(content_to_parse: Optional[Iterable] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog='protocol_parser',
                                      description=f"CLI of the protocol_parser module for the islets module. "
                                                  f"Version: {__version__}\nWritten by {__author__}")
@@ -25,7 +25,7 @@ def parse_cli_arguments(content_to_parse: Optional[Iterable]) -> argparse.Namesp
     return args
 
 
-def main(args: Optional[argparse.Namespace]):
+def main(args: Optional[argparse.Namespace] = None):
     parser: ParserBase
 
     args = parse_cli_arguments(args) if args is None else args
